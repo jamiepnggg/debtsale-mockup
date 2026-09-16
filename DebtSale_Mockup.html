@@ -1,0 +1,1142 @@
+<meta charset="utf-8">
+<title>Debt Sale Management — Funding Platform Mockup</title>
+<style>
+  :root{
+    --bg:#f4f6f9; --panel:#ffffff; --line:#e6e9ef; --line-strong:#d7dbe3;
+    --ink:#1f2733; --ink-2:#5b6472; --ink-3:#8a93a3;
+    --blue:#2f6bff; --blue-ink:#2357d6; --blue-soft:#eaf1ff;
+    --head:#f7f9fc;
+    --green:#0f9d63; --green-soft:#e6f6ee;
+    --amber:#b7791f; --amber-soft:#fdf3e2;
+    --slate:#5b6472; --slate-soft:#eef1f5;
+    --red:#d0453b; --red-soft:#fdecea;
+    --violet:#6c4bd8; --violet-soft:#f0ebff;
+    --radius:10px; --shadow:0 1px 2px rgba(19,28,45,.06),0 6px 20px rgba(19,28,45,.06);
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+  .app{display:grid;grid-template-columns:248px 1fr;grid-template-rows:56px 1fr;height:100vh;min-height:640px}
+
+  /* top bar */
+  .topbar{grid-column:1/3;display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid var(--line);padding:0 22px;z-index:5}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px}
+  .logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#2f6bff,#22b3c9);display:grid;place-items:center;color:#fff;font-size:15px;font-weight:800}
+  .brand small{font-weight:600;color:var(--ink-2)}
+  .user{display:flex;align-items:center;gap:9px;color:var(--ink-2);font-size:13px}
+  .avatar{width:28px;height:28px;border-radius:50%;background:#0f9d63;color:#fff;display:grid;place-items:center;font-weight:700;font-size:12px}
+
+  /* sidebar */
+  .side{background:#fff;border-right:1px solid var(--line);padding:12px 12px;overflow-y:auto}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:var(--ink-2);font-size:13.5px;cursor:default;user-select:none}
+  .nav-item .ic{width:16px;text-align:center;opacity:.75}
+  .nav-item.parent{font-weight:600;color:var(--ink)}
+  .nav-item .chev{margin-left:auto;color:var(--ink-3);font-size:11px}
+  .nav-group{margin-bottom:2px}
+  .nav-sub{margin:2px 0 6px}
+  .nav-sub a{display:block;padding:8px 12px 8px 40px;border-radius:8px;color:var(--ink-2);font-size:13px;text-decoration:none;cursor:pointer}
+  .nav-sub a:hover{background:var(--head)}
+  .nav-sub a.active{background:var(--blue-soft);color:var(--blue-ink);font-weight:600}
+  .nav-item.parent.hot{background:#f2f6ff}
+  .badge-new{margin-left:8px;font-size:10px;font-weight:700;letter-spacing:.03em;color:#fff;background:var(--blue);padding:1px 6px;border-radius:20px}
+
+  /* main */
+  .main{overflow-y:auto;padding:20px 26px 60px}
+  .crumb{color:var(--ink-3);font-size:13px;margin-bottom:16px}
+  .crumb b{color:var(--ink-2);font-weight:600}
+  .subtabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .subtab{padding:9px 16px;font-size:14px;font-weight:600;color:var(--ink-2);border-bottom:2px solid transparent;cursor:pointer;margin-bottom:-1px}
+  .subtab.active{color:var(--blue-ink);border-bottom-color:var(--blue)}
+
+  .rtabs{display:flex;gap:8px;flex-wrap:wrap}
+  .rtab{padding:8px 16px;border:1px solid var(--line-strong);border-radius:8px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;background:#fff;white-space:nowrap}
+  .rtab .cnt{font-weight:700}
+  .rtab.active{border-color:var(--blue);color:var(--blue-ink);background:var(--blue-soft)}
+  .icbtn{width:32px;height:32px;border-radius:7px;border:1px solid var(--line-strong);background:#fff;color:var(--ink-2);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
+  .icbtn:hover{border-color:var(--ink-3)}
+
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .filters{padding:16px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px 18px;align-items:end;margin-bottom:16px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field label{font-size:12px;color:var(--ink-2);font-weight:600}
+  .field .ctl{height:34px;border:1px solid var(--line-strong);border-radius:7px;background:#fff;padding:0 10px;color:var(--ink-3);display:flex;align-items:center;font-size:13px}
+  .filters .actions{grid-column:4;display:flex;gap:8px;justify-content:flex-end}
+  .btn{height:34px;padding:0 16px;border-radius:7px;font-size:13px;font-weight:600;border:1px solid var(--line-strong);background:#fff;color:var(--ink-2);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+  .btn.primary:hover{background:var(--blue-ink)}
+  .btn:hover{border-color:var(--ink-3)}
+
+  .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .toolbar h2{margin:0;font-size:15px}
+  .hint{font-size:12.5px;color:var(--ink-3)}
+  .hint b{color:var(--amber)}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  .tablewrap{overflow-x:auto}
+  thead th{background:var(--head);text-align:left;font-weight:600;color:var(--ink-2);font-size:12px;padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0}
+  tbody td{padding:13px 14px;border-bottom:1px solid var(--line);color:var(--ink);vertical-align:middle;white-space:nowrap}
+  tbody tr:hover{background:#fafbfe}
+  .num{font-variant-numeric:tabular-nums}
+  .muted{color:var(--ink-3)}
+  .link{color:var(--blue-ink);font-weight:600;cursor:pointer}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;letter-spacing:.02em;padding:3px 9px;border-radius:20px}
+  .pill .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+  .p-green{background:var(--green-soft);color:var(--green)}
+  .p-blue{background:var(--blue-soft);color:var(--blue-ink)}
+  .p-amber{background:var(--amber-soft);color:var(--amber)}
+  .p-slate{background:var(--slate-soft);color:var(--slate)}
+  .p-red{background:var(--red-soft);color:var(--red)}
+  .p-violet{background:var(--violet-soft);color:var(--violet)}
+  .p-teal{background:#dcf3f0;color:#0f766e}
+  .tag{font-size:11px;color:var(--ink-2);background:var(--slate-soft);padding:2px 8px;border-radius:5px}
+  .tag.new{color:var(--violet);background:var(--violet-soft);font-weight:700}
+  tr.fee-new td{background:var(--violet-soft)}
+
+  .hidden{display:none !important}
+
+  /* detail page */
+  .backlink{display:inline-flex;align-items:center;gap:6px;color:var(--ink-2);font-size:13px;cursor:pointer;margin-bottom:14px;font-weight:600}
+  .backlink:hover{color:var(--blue-ink)}
+  .stepper{display:flex;align-items:center;overflow-x:auto;padding:4px 2px 24px}
+  .stp{display:flex;align-items:center;gap:9px;white-space:nowrap;flex:0 0 auto}
+  .stp .c{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;flex:0 0 auto}
+  .stp.done .c{background:#fff;border:1.6px solid var(--blue);color:var(--blue)}
+  .stp.cur .c{background:var(--blue);color:#fff}
+  .stp.future .c{background:#fff;border:1.6px solid var(--line-strong);color:var(--ink-3)}
+  .stp .lb{font-size:14.5px;font-weight:600;color:var(--ink)}
+  .stp.future .lb{color:var(--ink-3)}
+  .conn{width:38px;height:2px;background:var(--blue);margin:0 9px;flex:0 0 auto}
+  .conn.dim{background:var(--line-strong)}
+  .sec{border:1px solid var(--line);border-radius:10px;margin-bottom:14px;overflow:hidden;background:#fff;box-shadow:var(--shadow)}
+  .sec>.hd{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#f7f9fc;font-weight:700;font-size:14px;cursor:pointer;user-select:none;border-bottom:1px solid var(--line)}
+  .sec>.hd .cv{color:var(--ink-3);font-size:11px;transition:transform .15s}
+  .sec.closed>.hd{border-bottom:none}
+  .sec.closed>.hd .cv{transform:rotate(-90deg)}
+  .sec>.bd{padding:18px}
+  .sec.closed>.bd{display:none}
+  .kvgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 36px;margin-bottom:6px}
+  .kv2{font-size:13.5px;line-height:1.4}
+  .kv2 .kl{color:var(--ink-3)}
+  .kv2 .vl{color:var(--ink);font-weight:500}
+  .dtable{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
+  .dtable th{text-align:left;font-weight:700;color:var(--ink);font-size:12.5px;padding:11px 14px;border-bottom:1.5px solid var(--line-strong)}
+  .dtable td{padding:12px 14px;border-bottom:1px solid var(--line);color:var(--ink)}
+  .dtable tr:last-child td{border-bottom:none}
+  .tc-input{display:inline-flex;align-items:center;height:32px;border:1px solid var(--line-strong);border-radius:6px;padding:0 12px;color:var(--ink-3);background:#f7f9fc;min-width:130px;font-size:12.5px}
+  .toolrow{display:flex;justify-content:flex-end;gap:16px;color:var(--ink-3);font-size:15px;padding:14px 2px 6px}
+  .empty{text-align:center;color:var(--ink-3);padding:30px 0;font-size:13px}
+  .empty .ic{font-size:26px;opacity:.5}
+
+  /* modal */
+  .scrim{position:fixed;inset:0;background:rgba(20,28,45,.42);display:grid;place-items:center;z-index:40;padding:20px}
+  .modal{width:520px;max-width:100%;background:#fff;border-radius:14px;box-shadow:0 24px 60px rgba(19,28,45,.28);overflow:hidden}
+  .modal header{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+  .modal header h3{margin:0;font-size:16px}
+  .modal .x{cursor:pointer;color:var(--ink-3);font-size:20px;line-height:1}
+  .modal .body{padding:20px 22px;display:flex;flex-direction:column;gap:16px}
+  .modal .body label{font-size:12.5px;font-weight:600;color:var(--ink-2);display:block;margin-bottom:6px}
+  .modal .body .ctl{height:38px;border:1px solid var(--line-strong);border-radius:8px;padding:0 12px;display:flex;align-items:center;color:var(--ink);font-size:13.5px;background:#fff}
+  .modal .callout{background:var(--amber-soft);border:1px solid #f0dcae;border-radius:8px;padding:11px 13px;font-size:12.5px;color:#8a5a12;display:flex;gap:9px}
+  .modal footer{padding:16px 22px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px}
+  .kv{display:grid;grid-template-columns:180px 1fr;gap:2px 0;font-size:13px}
+  .kv .k{color:var(--ink-3);padding:9px 0;border-bottom:1px solid var(--line)}
+  .kv .v{padding:9px 0;border-bottom:1px solid var(--line);font-weight:500}
+
+  /* detail */
+  .detailgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .stat .lbl{font-size:11.5px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+  .stat .val{font-size:20px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums}
+  .steps{display:flex;gap:0;margin:6px 0 20px;flex-wrap:wrap}
+  .step{display:flex;align-items:center;gap:9px;padding:8px 16px 8px 12px;position:relative}
+  .step .n{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;background:var(--slate-soft);color:var(--ink-3)}
+  .step.done .n{background:var(--green);color:#fff}
+  .step.cur .n{background:var(--blue);color:#fff}
+  .step .t{font-size:12.5px;color:var(--ink-2);font-weight:600}
+  .step.done .t{color:var(--ink)}
+  .step:not(:last-child):after{content:"";width:26px;height:2px;background:var(--line-strong);margin-left:6px}
+  .step.done:not(:last-child):after{background:var(--green)}
+  @media(max-width:1080px){.filters{grid-template-columns:repeat(2,1fr)}.filters .actions{grid-column:2}.detailgrid{grid-template-columns:repeat(2,1fr)}}
+</style>
+
+<div class="app">
+  <div class="topbar">
+    <div class="brand"><span class="logo">m</span> Funding Platform</div>
+    <div class="user"><span>jamie.hopy</span><span class="avatar">J</span></div>
+  </div>
+
+  <aside class="side">
+    <div class="nav-group"><div class="nav-item parent"><span class="ic">▤</span> Routing Management <span class="chev">⌄</span></div></div>
+    <div class="nav-group">
+      <div class="nav-item parent"><span class="ic">⚙</span> Lender Management <span class="chev">⌃</span></div>
+      <div class="nav-sub">
+        <a id="lnk-lenderlist" onclick="goLenderList()">Lender List</a>
+      </div>
+    </div>
+    <div class="nav-group"><div class="nav-item parent"><span class="ic">▤</span> Report Management <span class="chev">⌄</span></div></div>
+    <div class="nav-group"><div class="nav-item"><span class="ic">▦</span> Whitelist Configuration</div></div>
+    <div class="nav-group"><div class="nav-item"><span class="ic">◷</span> Alarm System</div></div>
+    <div class="nav-group"><div class="nav-item parent"><span class="ic">✉</span> Ticket Center <span class="chev">⌄</span></div></div>
+
+    <div class="nav-group">
+      <div class="nav-item parent hot"><span class="ic">💠</span> Debt Sale Management <span class="badge-new">NEW</span><span class="chev">⌃</span></div>
+      <div class="nav-sub">
+        <a id="lnk-pool" class="active" onclick="go('pool')">User Pool</a>
+        <a id="lnk-batch" onclick="go('batch')">Batch Management</a>
+        <a id="lnk-recon" onclick="go('recon')">Recon Admin</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="crumb">Home / <b id="crumbhead">Debt Sale Management</b> / <b id="crumbtail">User Pool</b></div>
+
+    <div class="subtabs">
+      <div id="tab-pool" class="subtab active" onclick="go('pool')">User Pool</div>
+      <div id="tab-batch" class="subtab" onclick="go('batch')">Batch Management</div>
+      <div id="tab-recon" class="subtab" onclick="go('recon')">Recon Admin</div>
+    </div>
+
+    <!-- ================= USER POOL ================= -->
+    <section id="view-pool">
+      <div class="panel filters">
+        <div class="field"><label>Funder Name</label><div class="ctl">Please select ⌄</div></div>
+        <div class="field"><label>Pool ID</label><div class="ctl">Please enter</div></div>
+        <div class="field"><label>Pool Status</label><div class="ctl">Please select ⌄</div></div>
+        <div class="actions"><button class="btn">Reset</button><button class="btn primary">Query</button></div>
+      </div>
+
+      <div class="toolbar">
+        <div class="hint">One pool per funder. Click a funder to <b>upload users, run Due Diligence, and download accepted / rejected lists.</b></div>
+        <span class="hint dim">Pools recompute daily · 03:00</span>
+      </div>
+
+      <div class="panel tablewrap">
+        <table>
+          <thead><tr>
+            <th>Funder ID</th><th>Funder Name</th><th>Pool ID</th><th>Pool Status</th>
+            <th>Total Users</th><th>Approved</th><th>Rejected</th><th>Pending DD</th>
+            <th>Last Updated</th><th>Operation</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td class="num">7641011</td><td>UOB_SPL_ABS_01</td><td class="num">POOL-7641011</td>
+              <td><span class="pill p-green"><span class="dot"></span>ACTIVE</span></td>
+              <td class="num">15,000</td><td class="num" style="color:var(--green)">12,000</td><td class="num" style="color:var(--red)">1,200</td><td class="num" style="color:var(--amber)">1,500</td>
+              <td class="muted">2026-07-24 03:00</td>
+              <td><span class="link" onclick="openPoolDetail()">View Pool</span></td>
+            </tr>
+            <tr>
+              <td class="num">7641232</td><td>TH_BCL_Pacific_Two_ABS_01</td><td class="num">POOL-7641232</td>
+              <td><span class="pill p-green"><span class="dot"></span>ACTIVE</span></td>
+              <td class="num">6,010</td><td class="num muted">—</td><td class="num muted">—</td><td class="num" style="color:var(--amber)">6,010</td>
+              <td class="muted">2026-07-24 03:00</td>
+              <td><span class="link" onclick="openPoolDetail()">View Pool</span></td>
+            </tr>
+            <tr>
+              <td class="num">7641540</td><td>KBank_DS_Alpha_01</td><td class="num">POOL-7641540</td>
+              <td><span class="pill p-slate"><span class="dot"></span>INACTIVE</span></td>
+              <td class="num">2,300</td><td class="num muted">0</td><td class="num muted">0</td><td class="num muted">0</td>
+              <td class="muted">2026-07-22 16:40</td>
+              <td><span class="link" onclick="openPoolDetail()">View Pool</span></td>
+            </tr>
+            <tr>
+              <td class="num">7641890</td><td>SCB_DebtSale_01</td><td class="num muted">—</td>
+              <td><span class="pill p-slate"><span class="dot"></span>INACTIVE</span></td>
+              <td class="num muted">—</td><td class="num muted">—</td><td class="num muted">—</td><td class="num muted">—</td>
+              <td class="muted">—</td>
+              <td><span class="link" onclick="openPoolDetail()">Set Up Pool</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= USER POOL DETAIL (drill-down page) ================= -->
+    <section id="view-pooldetail" class="hidden">
+      <span class="backlink" onclick="go('pool')">← Back to User Pool</span>
+
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+        <div>
+          <div style="font-size:18px;font-weight:700">UOB_SPL_ABS_01 · POOL-7641011</div>
+          <div class="muted" style="font-size:12.5px;margin-top:3px">Funder ID 7641011</div>
+        </div>
+        <span class="pill p-green" style="font-size:12.5px"><span class="dot"></span>ACTIVE</span>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        <button class="btn primary" onclick="openUpload()">⬆&nbsp; Upload Users (CSV)</button>
+      </div>
+      <div style="display:flex;gap:9px;align-items:flex-start;background:var(--blue-soft);border:1px solid #cfe0ff;border-radius:9px;padding:11px 14px;font-size:12.5px;color:var(--blue-ink);margin-bottom:18px;line-height:1.4">
+        <span>ℹ</span><div>Uploading a list <b>automatically sends it to the bank for Due Diligence</b> — <b>DebtSale_Decision_User</b> + KYC files go via SFTP. When the bank returns accepted / rejected, accepted users are notified and <b>NOTI_DD.csv</b> is sent to the bank. No manual "submit" step.</div>
+      </div>
+
+      <div class="detailgrid">
+        <div class="stat"><div class="lbl">Total Users</div><div class="val">15,000</div></div>
+        <div class="stat"><div class="lbl">Approved · Pass</div><div class="val" style="color:var(--green)">12,000</div></div>
+        <div class="stat"><div class="lbl">Rejected · Fail</div><div class="val" style="color:var(--red)">1,200</div></div>
+        <div class="stat"><div class="lbl">Pending DD</div><div class="val" style="color:var(--amber)">1,500</div></div>
+      </div>
+
+      <!-- Pool Info -->
+      <div class="sec">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Pool Info</div>
+        <div class="bd">
+          <div class="kvgrid">
+            <div class="kv2"><span class="kl">Pool ID：</span><span class="vl">POOL-7641011</span></div>
+            <div class="kv2"><span class="kl">Funder Name：</span><span class="vl">UOB_SPL_ABS_01</span></div>
+            <div class="kv2"><span class="kl">Pool Status：</span><span class="vl">ACTIVE</span></div>
+            <div class="kv2"><span class="kl">Created：</span><span class="vl">2026-05-02 10:14</span></div>
+            <div class="kv2"><span class="kl">Created By：</span><span class="vl">jamie.hopy@monee.com</span></div>
+            <div class="kv2"><span class="kl">Last Upload：</span><span class="vl">2026-07-15 09:40</span></div>
+            <div class="kv2"><span class="kl">Last DD Submitted：</span><span class="vl">2026-07-23 03:00</span></div>
+            <div class="kv2"><span class="kl">Last DD Result：</span><span class="vl">2026-07-23 08:00 (Pass / Fail received)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Status Summary -->
+      <div class="sec">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> User Status Summary</div>
+        <div class="bd">
+          <div class="muted" style="font-size:12.5px;margin-bottom:10px">Aggregated by Due-Diligence result — download the full list per status. (No single-user drill-down needed.)</div>
+          <table class="dtable">
+            <thead><tr><th>User Status</th><th>User Count</th><th>% of Pool</th><th style="text-align:right">Export</th></tr></thead>
+            <tbody>
+              <tr><td><span class="pill p-green"><span class="dot"></span>APPROVED · PASS</span></td><td class="num">12,000</td><td class="num">80.0%</td><td style="text-align:right"><span class="link">Download CSV</span></td></tr>
+              <tr><td><span class="pill p-red"><span class="dot"></span>REJECTED · FAIL</span></td><td class="num">1,200</td><td class="num">8.0%</td><td style="text-align:right"><span class="link">Download CSV</span></td></tr>
+              <tr><td><span class="pill p-amber"><span class="dot"></span>PENDING DD</span></td><td class="num">1,500</td><td class="num">10.0%</td><td style="text-align:right" class="muted">—</td></tr>
+              <tr><td><b>TOTAL</b></td><td class="num"><b>15,000</b></td><td class="num"><b>100%</b></td><td style="text-align:right" class="muted">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Uploads & DD Results (per file) -->
+      <div class="sec">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Uploads &amp; DD Results&nbsp;&nbsp;<span class="muted" style="font-weight:500;font-size:12px">— per upload file</span></div>
+        <div class="bd">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+            <div class="muted" style="font-size:12.5px">Each upload's DD result returns <b>all at once</b> — a file is either fully scored (accepted + rejected) or still <b>Pending</b> as a whole. <span style="color:var(--slate)">＋ 1 blacklist file · 300 users excluded.</span></div>
+            <div style="display:flex;gap:14px;font-size:11.5px;color:var(--ink-2)">
+              <span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:var(--green);vertical-align:middle;margin-right:5px"></i>Approved</span>
+              <span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:var(--red);vertical-align:middle;margin-right:5px"></i>Rejected</span>
+              <span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:var(--amber);vertical-align:middle;margin-right:5px"></i>Pending (whole file)</span>
+            </div>
+          </div>
+          <table class="dtable">
+            <thead><tr>
+              <th>Upload File</th><th>Upload ID</th><th>Uploaded</th><th>✓ Approved</th><th>✗ Rejected</th><th>DD Status</th><th style="width:160px">Breakdown</th><th style="text-align:right">Results</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td>users_20260720.csv<div class="muted" style="font-size:11px;margin-top:2px">2026-07-20 09:12 · jamie.hopy</div></td>
+                <td class="muted">UPL-7641011-1003</td>
+                <td class="num">1,500</td>
+                <td class="num muted">—</td>
+                <td class="num muted">—</td>
+                <td><span class="pill p-amber"><span class="dot"></span>PENDING</span></td>
+                <td><span style="display:inline-flex;height:9px;width:150px;border-radius:5px;overflow:hidden;background:var(--line);vertical-align:middle"><i style="width:100%;background:var(--amber)"></i></span></td>
+                <td style="text-align:right" class="muted">awaiting result</td>
+              </tr>
+              <tr>
+                <td>users_20260715.csv<div class="muted" style="font-size:11px;margin-top:2px">2026-07-15 09:40 · jamie.hopy</div></td>
+                <td class="muted">UPL-7641011-1002</td>
+                <td class="num">2,400</td>
+                <td class="num" style="color:var(--green);font-weight:700">2,100</td>
+                <td class="num" style="color:var(--red);font-weight:700">200</td>
+                <td><span class="pill p-green"><span class="dot"></span>DD COMPLETE</span></td>
+                <td><span style="display:inline-flex;height:9px;width:150px;border-radius:5px;overflow:hidden;background:var(--line);vertical-align:middle"><i style="width:87.5%;background:var(--green)"></i><i style="width:8.3%;background:var(--red)"></i><i style="width:4.2%;background:var(--violet)"></i></span></td>
+                <td style="text-align:right"><span class="link">Result File</span> · <span class="link">Approved</span> · <span class="link">Rejected</span> · <span class="link">Mismatched (100)</span></td>
+              </tr>
+              <tr>
+                <td>users_20260502.csv<div class="muted" style="font-size:11px;margin-top:2px">2026-05-02 10:14 · jamie.hopy</div></td>
+                <td class="muted">UPL-7641011-1001</td>
+                <td class="num">10,800</td>
+                <td class="num" style="color:var(--green);font-weight:700">9,900</td>
+                <td class="num" style="color:var(--red);font-weight:700">900</td>
+                <td><span class="pill p-green"><span class="dot"></span>DD COMPLETE</span></td>
+                <td><span style="display:inline-flex;height:9px;width:150px;border-radius:5px;overflow:hidden;background:var(--line);vertical-align:middle"><i style="width:91.7%;background:var(--green)"></i><i style="width:8.3%;background:var(--red)"></i></span></td>
+                <td style="text-align:right"><span class="link">Result File</span> · <span class="link">Approved</span> · <span class="link">Rejected</span></td>
+              </tr>
+              <tr style="background:#fafbfe">
+                <td><b>TOTAL · uploaded</b></td>
+                <td></td>
+                <td class="num"><b>14,700</b></td>
+                <td class="num" style="color:var(--green)"><b>12,000</b></td>
+                <td class="num" style="color:var(--red)"><b>1,200</b></td>
+                <td class="muted" style="font-size:12px">1,500 pending</td>
+                <td><span style="display:inline-flex;height:9px;width:150px;border-radius:5px;overflow:hidden;background:var(--line);vertical-align:middle"><i style="width:81.6%;background:var(--green)"></i><i style="width:8.2%;background:var(--red)"></i><i style="width:10.2%;background:var(--amber)"></i></span></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BATCH MANAGEMENT ================= -->
+    <section id="view-batch" class="hidden">
+      <div class="panel filters">
+        <div class="field"><label>Funder Name</label><div class="ctl">Please select ⌄</div></div>
+        <div class="field"><label>Batch No.</label><div class="ctl">Please enter</div></div>
+        <div class="field"><label>Cut-off Time</label><div class="ctl">Start → End</div></div>
+        <div class="field"><label>Batch Status</label><div class="ctl">Please select ⌄</div></div>
+        <div class="field"><label>Batch Tag</label><div class="ctl">Please select ⌄</div></div>
+        <div class="actions"><button class="btn">Reset</button><button class="btn primary">Query</button></div>
+      </div>
+
+      <div class="toolbar">
+        <div class="hint">Internal steps confirm the loans; then the bank <b>accepts / rejects</b> them at <b>Pending Bank DD</b>. Rejected loans are <b>automatically revoked from the batch</b> and returned to the pool — Batch Status tracks the batch's stage, not per-loan outcome.</div>
+        <button class="btn primary" onclick="openBatch()">+ Create New Batch</button>
+      </div>
+
+      <div class="panel tablewrap">
+        <table>
+          <thead><tr>
+            <th>Funder ID</th><th>Funder Name</th><th>Batch No.</th><th>Cut-off Time</th>
+            <th>Batch Status</th><th>Batch Tag</th><th>Loan Count</th>
+            <th>Outstanding Principal</th><th>Target Selling Price</th><th>Actual Selling Price</th>
+            <th>Create Time</th><th>Operation</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td class="num">7641011</td><td>UOB_SPL_ABS_01</td><td class="num">UOB_DS_01-20260724-0051</td>
+              <td class="num">2026-08-01 00:00</td>
+              <td><span class="pill p-green"><span class="dot"></span>SOLD</span> <span class="tag" style="color:var(--red);background:var(--red-soft);margin-left:4px">60 revoked</span></td>
+              <td><span class="tag">Normal</span></td><td class="num">1,180<div class="muted" style="font-size:11px;margin-top:2px">1,240 submitted</div></td>
+              <td class="num">฿ 3,940,000</td><td class="num">฿ 3,900,000</td><td class="num">฿ 3,912,400</td>
+              <td class="muted">2026-07-24 03:12</td>
+              <td><span class="link" onclick="openDetail()">View Batch Detail</span></td>
+            </tr>
+            <tr>
+              <td class="num">7641011</td><td>UOB_SPL_ABS_01</td><td class="num">UOB_DS_01-20260724-0052</td>
+              <td class="num">2026-08-01 00:00</td>
+              <td><span class="pill p-green"><span class="dot"></span>SOLD</span> <span class="tag" style="color:var(--red);background:var(--red-soft);margin-left:4px">60 revoked</span> <span class="tag" style="color:var(--amber);background:var(--amber-soft);margin-left:4px">10 mismatched</span></td>
+              <td><span class="tag">Normal</span></td><td class="num">1,180<div class="muted" style="font-size:11px;margin-top:2px">1,250 submitted</div></td>
+              <td class="num">฿ 3,940,000</td><td class="num">฿ 3,900,000</td><td class="num">฿ 3,912,400</td>
+              <td class="muted">2026-07-24 03:14</td>
+              <td><span class="link" onclick="openDetail2()">View Batch Detail</span></td>
+            </tr>
+            <tr>
+              <td class="num">7641011</td><td>UOB_SPL_ABS_01</td><td class="num">UOB_DS_01-20260724-0050</td>
+              <td class="num">2026-08-01 00:00</td>
+              <td><span class="pill p-teal"><span class="dot"></span>PENDING BANK DD</span></td>
+              <td><span class="tag">Normal</span></td><td class="num">318</td>
+              <td class="num">฿ 1,060,000</td><td class="num">฿ 998,000</td><td class="num muted">—</td>
+              <td class="muted">2026-07-24 03:10</td>
+              <td><span class="link" onclick="openDetail()">View Batch Detail</span></td>
+            </tr>
+            <tr>
+              <td class="num">7641232</td><td>TH_BCL_Pacific_Two_ABS_01</td><td class="num">BCL_DS_01-20260723-0049</td>
+              <td class="num">2026-08-01 00:00</td>
+              <td><span class="pill p-violet"><span class="dot"></span>PENDING SOLD</span></td>
+              <td><span class="tag">Normal</span></td><td class="num">905</td>
+              <td class="num">฿ 2,870,500</td><td class="num">฿ 2,700,000</td><td class="num muted">—</td>
+              <td class="muted">2026-07-23 03:05</td>
+              <td><span class="link" onclick="openDetail()">View Batch Detail</span></td>
+            </tr>
+            <tr>
+              <td class="num">7641232</td><td>TH_BCL_Pacific_Two_ABS_01</td><td class="num">BCL_DS_01-20260723-0048</td>
+              <td class="num">2026-08-01 00:00</td>
+              <td><span class="pill p-amber"><span class="dot"></span>BATCHING</span></td>
+              <td><span class="tag">Live Test</span></td><td class="num">1,102</td>
+              <td class="num">฿ 3,450,000</td><td class="num">฿ 3,250,000</td><td class="num muted">—</td>
+              <td class="muted">2026-07-23 03:00</td>
+              <td><span class="link" onclick="openDetail()">View Batch Detail</span></td>
+            </tr>
+            <tr>
+              <td class="num">7641540</td><td>KBank_DS_Alpha_01</td><td class="num">KBK_DS_01-20260722-0047</td>
+              <td class="num">2026-08-01 00:00</td>
+              <td><span class="pill p-slate"><span class="dot"></span>DRAFT</span></td>
+              <td><span class="tag">Normal</span></td><td class="num">0</td>
+              <td class="num muted">—</td><td class="num muted">—</td><td class="num muted">—</td>
+              <td class="muted">2026-07-22 16:40</td>
+              <td><span class="link" onclick="openDetail()">View Batch Detail</span></td>
+            </tr>
+            <tr>
+              <td class="num">7641540</td><td>KBank_DS_Alpha_01</td><td class="num">KBK_DS_01-20260710-0044</td>
+              <td class="num">2026-07-15 00:00</td>
+              <td><span class="pill p-red"><span class="dot"></span>REVOKED</span></td>
+              <td><span class="tag">Normal</span></td><td class="num">0</td>
+              <td class="num">฿ 0</td><td class="num">฿ 88,888</td><td class="num">฿ 0</td>
+              <td class="muted">2026-07-10 09:25</td>
+              <td><span class="link" onclick="openDetail()">View Batch Detail</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <!-- ================= BATCH DETAIL (drill-down page) ================= -->
+    <section id="view-detail" class="hidden">
+      <span class="backlink" onclick="go('batch')">← Back to Batch Management</span>
+
+      <div class="stepper">
+        <div class="stp done"><span class="c">✓</span><span class="lb">Init</span></div><div class="conn"></div>
+        <div class="stp done"><span class="c">✓</span><span class="lb">Matched</span></div><div class="conn"></div>
+        <div class="stp done"><span class="c">✓</span><span class="lb">Batching</span></div><div class="conn"></div>
+        <div class="stp done"><span class="c">✓</span><span class="lb">Pending Sold</span></div><div class="conn"></div>
+        <div class="stp done"><span class="c">✓</span><span class="lb" style="color:#0f766e">Bank DD</span></div><div class="conn"></div>
+        <div class="stp done"><span class="c">✓</span><span class="lb">Selling</span></div><div class="conn"></div>
+        <div class="stp cur"><span class="c">7</span><span class="lb">Sold</span></div>
+      </div>
+
+      <!-- Batch Info -->
+      <div class="sec">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Batch Info</div>
+        <div class="bd">
+          <div class="kvgrid">
+            <div class="kv2"><span class="kl">Batch No：</span><span class="vl">UOB_DS_01-3500-20260724-0051</span></div>
+            <div class="kv2"><span class="kl">Batch Status：</span><span class="vl">SOLD</span></div>
+            <div class="kv2"><span class="kl">Funder Name：</span><span class="vl">UOB_SPL_ABS_01</span></div>
+            <div class="kv2"><span class="kl">Batch Create Time：</span><span class="vl">2026-07-24 03:12:04</span></div>
+            <div class="kv2"><span class="kl">Batch Created By：</span><span class="vl">jamie.hopy@monee.com</span></div>
+            <div class="kv2"><span class="kl">Batch Cutoff Time：</span><span class="vl">2026-08-01 00:00:00</span></div>
+            <div class="kv2"><span class="kl">Batch Target Selling Value：</span><span class="vl">฿ 3,900,000</span></div>
+            <div class="kv2"><span class="kl">Batch Actual Selling Value：</span><span class="vl">฿ 3,912,400</span></div>
+            <div class="kv2"><span class="kl">Batch Target Selling Date：</span><span class="vl">2026-08-01 00:00:00</span></div>
+            <div class="kv2"><span class="kl">Source Pool：</span><span class="vl">POOL-7641011</span></div>
+            <div class="kv2"><span class="kl">Upfront Fee：</span><span class="vl">฿ 12,400</span></div>
+            <div class="kv2"><span class="kl">Batch Confirmed By：</span><span class="vl">jamie.hopy@monee.com</span></div>
+          </div>
+
+          <div class="toolrow"><span>⟳</span><span>⚙</span></div>
+          <div class="muted" style="font-size:12px;margin-bottom:8px">Bank DD result — which submitted loans the bank <b>accepted</b> vs <b>rejected</b>. Rejected loans are <b>revoked from this batch automatically</b> and returned to the pool for a future batch; they no longer count toward Batch Total OS or Selling Value below.</div>
+          <table class="dtable">
+            <thead><tr><th>Loan Debt Sale Status</th><th>Loan Count</th><th>Total Loan Amount</th><th style="text-align:right">Export</th><th>Remarks</th></tr></thead>
+            <tbody>
+              <tr><td><span class="pill p-green"><span class="dot"></span>ACCEPTED · SOLD</span></td><td class="num">1,180</td><td class="num">฿ 3,940,000</td><td style="text-align:right" class="muted">—</td><td class="muted" style="white-space:normal;max-width:260px">Accepted loans by LHB</td></tr>
+              <tr><td><span class="pill p-red"><span class="dot"></span>REVOKED FROM BATCH</span><div class="muted" style="font-size:11px;margin-top:2px">rejected by bank · returned to pool</div></td><td class="num">60</td><td class="num">฿ 180,000</td><td style="text-align:right"><span class="link">Download CSV</span></td><td class="muted" style="white-space:normal;max-width:260px">Rejected loans by LHB, will auto revoke</td></tr>
+              <tr><td><b>TOTAL SUBMITTED</b></td><td class="num"><b>1,240</b></td><td class="num"><b>฿ 4,120,000</b></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+
+          <div class="toolrow"><span>⟳</span><span>⚙</span></div>
+          <table class="dtable">
+            <thead><tr><th style="width:26%">Traffic Control</th><th>Range</th><th style="text-align:right;width:20%">Current Value</th></tr></thead>
+            <tbody><tr>
+              <td>Batch Total OS</td>
+              <td><span class="tc-input">฿ 0</span> &nbsp;<span style="color:var(--ink-3)">~</span>&nbsp; <span class="tc-input">฿ 3,940,000</span><div class="muted" style="font-size:11px;margin-top:4px">recomputed after revoke — excludes 60 revoked loans (฿180,000)</div></td>
+              <td class="num" style="text-align:right">฿ 0</td>
+            </tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Activity -->
+      <div class="sec">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Activity</div>
+        <div class="bd">
+          <table class="dtable">
+            <thead><tr><th>Activity</th><th>Create Time</th><th>Update Time</th></tr></thead>
+            <tbody>
+              <tr><td>@schedule sell the Batch</td><td class="muted">2026-07-24 05:20:03</td><td class="muted">2026-07-24 05:20:03</td></tr>
+              <tr><td>jamie.hopy@monee.com selling the Batch</td><td class="muted">2026-07-24 05:17:56</td><td class="muted">2026-07-24 05:17:56</td></tr>
+              <tr><td>@schedule revoked <b style="color:var(--red)">60 rejected loans</b> from Batch — returned to POOL-7641011</td><td class="muted">2026-07-24 05:12:35</td><td class="muted">2026-07-24 05:12:35</td></tr>
+              <tr><td>@schedule bank DD result received — <b style="color:var(--green)">1,180 accepted</b> / <b style="color:var(--red)">60 rejected</b></td><td class="muted">2026-07-24 05:12:30</td><td class="muted">2026-07-24 05:12:30</td></tr>
+              <tr><td>@schedule cutoff over the Batch</td><td class="muted">2026-07-24 05:08:48</td><td class="muted">2026-07-24 05:08:48</td></tr>
+              <tr><td>@schedule cutoff the Batch</td><td class="muted">2026-07-24 04:25:16</td><td class="muted">2026-07-24 04:25:16</td></tr>
+              <tr><td>jamie.hopy@monee.com create the Batch</td><td class="muted">2026-07-24 03:12:04</td><td class="muted">2026-07-24 03:12:04</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Associated Ticket -->
+      <div class="sec">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Associated Ticket</div>
+        <div class="bd">
+          <table class="dtable"><thead><tr><th>Ticket Type</th><th>Status</th><th>Create Time</th><th>Last Update Time</th></tr></thead></table>
+          <div class="empty"><div class="ic">▢</div>No data</div>
+        </div>
+      </div>
+
+      <!-- Operations -->
+      <div class="sec closed">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Operations</div>
+        <div class="bd">
+          <div style="display:flex;gap:10px"><button class="btn">Revoke Batch</button><button class="btn">Re-run DD</button><button class="btn">Download All Files</button></div>
+        </div>
+      </div>
+
+      <!-- Files -->
+      <div class="sec">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Files</div>
+        <div class="bd">
+          <table class="dtable">
+            <thead><tr><th>File Name</th><th>File Type</th><th>Created By</th><th>Create Time</th><th style="text-align:right">Link</th></tr></thead>
+            <tbody>
+              <tr><td>loan_list_initial_20260724.csv</td><td class="muted">Sent → Bank</td><td class="muted">@schedule</td><td class="muted">2026-07-24 03:15</td><td style="text-align:right"><span class="link">Link</span></td></tr>
+              <tr><td>bank_dd_result_20260724.csv</td><td class="muted">Result ← Bank</td><td class="muted">@schedule</td><td class="muted">2026-07-24 05:12</td><td style="text-align:right"><span class="link">Link</span></td></tr>
+              <tr><td>revoked_loans_20260724.csv</td><td class="muted">Sent → Pool</td><td class="muted">@schedule</td><td class="muted">2026-07-24 05:12</td><td style="text-align:right"><span class="link">Link</span></td></tr>
+              <tr><td>loan_list_final_20260724.csv</td><td class="muted">Sent → Bank</td><td class="muted">@schedule</td><td class="muted">2026-07-24 05:17</td><td style="text-align:right"><span class="link">Link</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BATCH DETAIL 2 (drill-down page — MISMATCH / "not happy" example) ================= -->
+    <section id="view-detail2" class="hidden">
+      <span class="backlink" onclick="go('batch')">← Back to Batch Management</span>
+
+      <div style="display:flex;align-items:flex-start;gap:9px;background:var(--amber-soft);border:1px solid #f0dcae;border-radius:9px;padding:11px 14px;font-size:12.5px;color:#8a5a12;margin-bottom:16px;line-height:1.45">
+        <span>⚠</span><div><b>SeaTalk alert sent to BD</b> — the number of loans returned by LHB does not match the number submitted. 10 loans are mismatched; recon with LHB is required.</div>
+      </div>
+
+      <div class="stepper">
+        <div class="stp done"><span class="c">✓</span><span class="lb">Init</span></div><div class="conn"></div>
+        <div class="stp done"><span class="c">✓</span><span class="lb">Matched</span></div><div class="conn"></div>
+        <div class="stp done"><span class="c">✓</span><span class="lb">Batching</span></div><div class="conn"></div>
+        <div class="stp done"><span class="c">✓</span><span class="lb">Pending Sold</span></div><div class="conn"></div>
+        <div class="stp done"><span class="c">✓</span><span class="lb" style="color:#0f766e">Bank DD</span></div><div class="conn"></div>
+        <div class="stp done"><span class="c">✓</span><span class="lb">Selling</span></div><div class="conn"></div>
+        <div class="stp cur"><span class="c">7</span><span class="lb">Sold</span></div>
+      </div>
+
+      <!-- Batch Info -->
+      <div class="sec">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Batch Info</div>
+        <div class="bd">
+          <div class="kvgrid">
+            <div class="kv2"><span class="kl">Batch No：</span><span class="vl">UOB_DS_01-3500-20260724-0052</span></div>
+            <div class="kv2"><span class="kl">Batch Status：</span><span class="vl">SOLD</span></div>
+            <div class="kv2"><span class="kl">Funder Name：</span><span class="vl">UOB_SPL_ABS_01</span></div>
+            <div class="kv2"><span class="kl">Batch Create Time：</span><span class="vl">2026-07-24 03:14:11</span></div>
+            <div class="kv2"><span class="kl">Batch Created By：</span><span class="vl">jamie.hopy@monee.com</span></div>
+            <div class="kv2"><span class="kl">Batch Cutoff Time：</span><span class="vl">2026-08-01 00:00:00</span></div>
+            <div class="kv2"><span class="kl">Batch Target Selling Value：</span><span class="vl">฿ 3,900,000</span></div>
+            <div class="kv2"><span class="kl">Batch Actual Selling Value：</span><span class="vl">฿ 3,912,400</span></div>
+            <div class="kv2"><span class="kl">Batch Target Selling Date：</span><span class="vl">2026-08-01 00:00:00</span></div>
+            <div class="kv2"><span class="kl">Source Pool：</span><span class="vl">POOL-7641011</span></div>
+            <div class="kv2"><span class="kl">Upfront Fee：</span><span class="vl">฿ 12,400</span></div>
+            <div class="kv2"><span class="kl">Batch Confirmed By：</span><span class="vl">jamie.hopy@monee.com</span></div>
+          </div>
+
+          <div class="toolrow"><span>⟳</span><span>⚙</span></div>
+          <div class="muted" style="font-size:12px;margin-bottom:8px">Bank DD result — which submitted loans the bank <b>accepted</b> vs <b>rejected</b>. Rejected loans are <b>revoked from this batch automatically</b> and returned to the pool for a future batch; they no longer count toward Batch Total OS or Selling Value below. If the number of loans <b>returned by LHB does not match</b> the number <b>submitted</b>, a <b>Mismatched</b> row appears below.</div>
+          <table class="dtable">
+            <thead><tr><th>Loan Debt Sale Status</th><th>Loan Count</th><th>Total Loan Amount</th><th style="text-align:right">Export</th><th>Remarks</th></tr></thead>
+            <tbody>
+              <tr><td><span class="pill p-green"><span class="dot"></span>APPROVED · SOLD</span></td><td class="num">1,180</td><td class="num">฿ 3,940,000</td><td style="text-align:right" class="muted">—</td><td class="muted" style="white-space:normal;max-width:260px">Accepted loans by LHB</td></tr>
+              <tr><td><span class="pill p-red"><span class="dot"></span>REJECTED</span><div class="muted" style="font-size:11px;margin-top:2px">rejected by bank · returned to pool</div></td><td class="num">60</td><td class="num">฿ 180,000</td><td style="text-align:right"><span class="link">Download CSV</span></td><td class="muted" style="white-space:normal;max-width:260px">Rejected loans by LHB, will auto revoke</td></tr>
+              <tr><td><span class="pill p-amber"><span class="dot"></span>MISMATCHED</span><div class="muted" style="font-size:11px;margin-top:2px">returned count ≠ submitted count · auto revoked</div></td><td class="num">10</td><td class="num">฿ 5,000</td><td style="text-align:right"><span class="link">Download CSV</span></td><td class="muted" style="white-space:normal;max-width:260px">If the number of loans returned by LHB does not match the number of loans submitted, the system will generate a Mismatch file containing the unmatched loans. Mismatched loans will be automatically revoked and will not be included in the final loan list.</td></tr>
+              <tr><td><b>TOTAL SUBMITTED</b></td><td class="num"><b>1,240</b></td><td class="num"><b>฿ 4,120,000</b></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+
+          <div class="toolrow"><span>⟳</span><span>⚙</span></div>
+          <table class="dtable">
+            <thead><tr><th style="width:26%">Traffic Control</th><th>Range</th><th style="text-align:right;width:20%">Current Value</th></tr></thead>
+            <tbody><tr>
+              <td>Batch Total OS</td>
+              <td><span class="tc-input">฿ 0</span> &nbsp;<span style="color:var(--ink-3)">~</span>&nbsp; <span class="tc-input">฿ 3,940,000</span><div class="muted" style="font-size:11px;margin-top:4px">recomputed after revoke — excludes 60 revoked (฿180,000) + 10 mismatched (฿5,000) loans</div></td>
+              <td class="num" style="text-align:right">฿ 0</td>
+            </tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Activity -->
+      <div class="sec">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Activity</div>
+        <div class="bd">
+          <table class="dtable">
+            <thead><tr><th>Activity</th><th>Create Time</th><th>Update Time</th></tr></thead>
+            <tbody>
+              <tr><td>@schedule sell the Batch</td><td class="muted">2026-07-24 05:22:03</td><td class="muted">2026-07-24 05:22:03</td></tr>
+              <tr><td>jamie.hopy@monee.com selling the Batch</td><td class="muted">2026-07-24 05:19:40</td><td class="muted">2026-07-24 05:19:40</td></tr>
+              <tr><td>SeaTalk alert sent to BD — <b style="color:var(--amber)">10 mismatched loans</b> vs LHB returned count, recon required</td><td class="muted">2026-07-24 05:14:52</td><td class="muted">2026-07-24 05:14:52</td></tr>
+              <tr><td>@schedule auto-revoked <b style="color:var(--amber)">10 mismatched loans</b> from Batch — excluded from final loan list</td><td class="muted">2026-07-24 05:14:50</td><td class="muted">2026-07-24 05:14:50</td></tr>
+              <tr><td>@schedule revoked <b style="color:var(--red)">60 rejected loans</b> from Batch — returned to POOL-7641011</td><td class="muted">2026-07-24 05:12:35</td><td class="muted">2026-07-24 05:12:35</td></tr>
+              <tr><td>@schedule bank DD result received — <b style="color:var(--green)">1,180 accepted</b> / <b style="color:var(--red)">60 rejected</b> / <b style="color:var(--amber)">10 mismatched</b></td><td class="muted">2026-07-24 05:12:30</td><td class="muted">2026-07-24 05:12:30</td></tr>
+              <tr><td>@schedule cutoff over the Batch</td><td class="muted">2026-07-24 05:08:48</td><td class="muted">2026-07-24 05:08:48</td></tr>
+              <tr><td>@schedule cutoff the Batch</td><td class="muted">2026-07-24 04:25:16</td><td class="muted">2026-07-24 04:25:16</td></tr>
+              <tr><td>jamie.hopy@monee.com create the Batch</td><td class="muted">2026-07-24 03:14:11</td><td class="muted">2026-07-24 03:14:11</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Associated Ticket -->
+      <div class="sec">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Associated Ticket</div>
+        <div class="bd">
+          <table class="dtable"><thead><tr><th>Ticket Type</th><th>Status</th><th>Create Time</th><th>Last Update Time</th></tr></thead></table>
+          <div class="empty"><div class="ic">▢</div>No data</div>
+        </div>
+      </div>
+
+      <!-- Operations -->
+      <div class="sec closed">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Operations</div>
+        <div class="bd">
+          <div style="display:flex;gap:10px"><button class="btn">Revoke Batch</button><button class="btn">Re-run DD</button><button class="btn">Download All Files</button></div>
+        </div>
+      </div>
+
+      <!-- Files -->
+      <div class="sec">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Files</div>
+        <div class="bd">
+          <table class="dtable">
+            <thead><tr><th>File Name</th><th>File Type</th><th>Created By</th><th>Create Time</th><th style="text-align:right">Link</th></tr></thead>
+            <tbody>
+              <tr><td>loan_list_initial_20260724.csv</td><td class="muted">Sent → Bank</td><td class="muted">@schedule</td><td class="muted">2026-07-24 03:16</td><td style="text-align:right"><span class="link">Link</span></td></tr>
+              <tr><td>bank_dd_result_20260724.csv</td><td class="muted">Result ← Bank</td><td class="muted">@schedule</td><td class="muted">2026-07-24 05:12</td><td style="text-align:right"><span class="link">Link</span></td></tr>
+              <tr><td>mismatch_file_20260724.csv</td><td class="muted">Result ← Bank</td><td class="muted">@schedule</td><td class="muted">2026-07-24 05:12</td><td style="text-align:right"><span class="link">Link</span></td></tr>
+              <tr><td>revoked_loans_20260724.csv</td><td class="muted">Sent → Pool</td><td class="muted">@schedule</td><td class="muted">2026-07-24 05:14</td><td style="text-align:right"><span class="link">Link</span></td></tr>
+              <tr><td>loan_list_final_20260724.csv</td><td class="muted">Sent → Bank</td><td class="muted">@schedule</td><td class="muted">2026-07-24 05:19</td><td style="text-align:right"><span class="link">Link</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= RECON ADMIN ================= -->
+    <section id="view-recon" class="hidden">
+      <div class="panel filters" style="grid-template-columns:repeat(3,1fr)">
+        <div class="field"><label>Frequency</label><div class="ctl">DAILY ⌄</div></div>
+        <div class="field"><label>Product Type</label><div class="ctl">All ⌄</div></div>
+        <div class="field"><label>Task Type</label><div class="ctl">All ⌄</div></div>
+        <div class="field"><label>Task Name</label><div class="ctl muted">please select ⌄</div></div>
+        <div class="field"><label>Business Time</label><div class="ctl">2026-08-05 📅</div></div>
+        <div class="field"><label>Process Time</label><div class="ctl muted">Pleas… → Pleas… 📅</div></div>
+        <div class="actions" style="grid-column:3"><button class="btn">Reset</button><button class="btn primary">Query</button></div>
+      </div>
+
+      <div class="hint" style="margin-bottom:12px">Recon runs daily per task; a batch lands in <b>Matched</b>, <b>Mismatched</b> or <b>Processing</b>. The bank only uploads a loan-level <b>mismatch</b> file — matched batches have nothing to download. Download the mismatch file, or rerun selected mismatches.</div>
+
+      <div class="toolbar">
+        <div class="rtabs">
+          <div id="rtab-matched" class="rtab" onclick="reconTab('matched')">MATCHED&nbsp;<span class="cnt">(807)</span></div>
+          <div id="rtab-mismatched" class="rtab active" onclick="reconTab('mismatched')">MISMATCHED&nbsp;<span class="cnt">(162)</span></div>
+          <div id="rtab-processing" class="rtab" onclick="reconTab('processing')">PROCESSING&nbsp;<span class="cnt">(27)</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="btn" disabled style="opacity:.45;cursor:not-allowed">Batch Rerun</button>
+          <button id="recon-download-btn" class="btn primary" onclick="openReconDownload()">Download</button>
+          <span class="icbtn" title="Refresh">⟳</span>
+          <span class="icbtn" title="Columns">▤</span>
+          <span class="icbtn" title="Settings">⚙</span>
+        </div>
+      </div>
+
+      <!-- MISMATCHED (default) -->
+      <div id="recon-mismatched" class="panel tablewrap">
+        <table>
+          <thead><tr>
+            <th style="width:36px"><input type="checkbox"></th><th>#</th><th>Recon Batch</th><th>Recon Name</th><th>Frequency</th><th>Product Type</th><th>Action</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox"></td><td class="num">1</td><td class="num">171_20260805_1786001115233</td>
+              <td>UOB_SPL_Transaction_Accounting_Repay_Transaction_Flow_Raw_Report</td>
+              <td>DAILY</td><td>Consumer Loan</td>
+              <td><span class="link" onclick="openReconDownload()">Download</span></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td><td class="num">2</td><td class="num">492_20260805_1786000940926</td>
+              <td>BCL_SPL_Channel_DP_Repayment_Recon_Report</td>
+              <td>DAILY</td><td>Consumer Loan</td>
+              <td><span class="link" onclick="openReconDownload()">Download</span></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td><td class="num">3</td><td class="num">344_20260805_1786000893910</td>
+              <td>BCL_SL_Channel_DP_Repayment_Recon_Report</td>
+              <td>DAILY</td><td>Seller Loan</td>
+              <td><span class="link" onclick="openReconDownload()">Download</span></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td><td class="num">4</td><td class="num">495_20260805_1785999732240</td>
+              <td>SCB_SCL_Repayment_TPB_Credit_Result</td>
+              <td>DAILY</td><td>Seller Loan</td>
+              <td><span class="link" onclick="openReconDownload()">Download</span></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td><td class="num">5</td><td class="num">1249_20260805_1785993088178</td>
+              <td>KBK_BCL_UsedLimit_Recon</td>
+              <td>DAILY</td><td>Buyer Loan</td>
+              <td><span class="link" onclick="openReconDownload()">Download</span></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td><td class="num">6</td><td class="num">496_20260805_1785998272702</td>
+              <td>BCL_SPL_SCD_Disbursement_Recon_Report</td>
+              <td>DAILY</td><td>Consumer Loan</td>
+              <td><span class="link" onclick="openReconDownload()">Download</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- MATCHED -->
+      <div id="recon-matched" class="panel tablewrap hidden">
+        <table>
+          <thead><tr>
+            <th>#</th><th>Recon Batch</th><th>Recon Name</th><th>Frequency</th><th>Product Type</th><th>Action</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td class="num">1</td><td class="num">168_20260805_1786001100011</td>
+              <td>UOB_SPL_Disbursement_Portfolio_Recon</td>
+              <td>DAILY</td><td>Consumer Loan</td>
+              <td class="muted">—</td>
+            </tr>
+            <tr>
+              <td class="num">2</td><td class="num">402_20260805_1786000811234</td>
+              <td>BCL_SPL_Repayment_Portfolio_Recon</td>
+              <td>DAILY</td><td>Consumer Loan</td>
+              <td class="muted">—</td>
+            </tr>
+            <tr>
+              <td class="num">3</td><td class="num">1180_20260805_1785993000019</td>
+              <td>KBK_BCL_Repayment_Portfolio_Recon</td>
+              <td>DAILY</td><td>Buyer Loan</td>
+              <td class="muted">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PROCESSING -->
+      <div id="recon-processing" class="panel tablewrap hidden">
+        <table>
+          <thead><tr>
+            <th>#</th><th>Recon Batch</th><th>Recon Name</th><th>Frequency</th><th>Product Type</th><th>Action</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td class="num">1</td><td class="num">501_20260805_1786002200011</td>
+              <td>KBK_SPL_Settlement_Recon</td>
+              <td>DAILY</td><td>Consumer Loan</td>
+              <td><span class="pill p-amber"><span class="dot"></span>RUNNING</span></td>
+            </tr>
+            <tr>
+              <td class="num">2</td><td class="num">733_20260805_1786002100987</td>
+              <td>SCB_SPL_Accounting_Coin_Cashback_Recon_Report</td>
+              <td>DAILY</td><td>Consumer Loan</td>
+              <td><span class="pill p-amber"><span class="dot"></span>RUNNING</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= LENDER LIST ================= -->
+    <section id="view-lenderlist" class="hidden">
+      <div class="panel tablewrap">
+        <table>
+          <thead><tr>
+            <th>#</th><th>Funder ID</th><th>Funder Name</th><th>Platform/Agent</th><th>Funder Scheme</th><th>Create Time</th><th style="text-align:right">Operation</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td class="num">1041001</td><td>SPL_UNICORN</td><td>UNICORN</td><td><span class="tag">Channeling</span></td><td class="muted">2022-07-14 04:48:15</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr><td class="num">2</td><td class="num">1041101</td><td>TH_SPL_Pioneer_01</td><td>UNICORN</td><td><span class="tag">ABS</span></td><td class="muted">2022-07-14 04:48:15</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr><td class="num">3</td><td class="num">1041002</td><td>BCL_SEAMONEY</td><td>Seamoney</td><td><span class="tag">Channeling</span></td><td class="muted">2022-08-26 01:32:35</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr><td class="num">4</td><td class="num">7641011</td><td>TH_SPL_Starlight_ABS_01</td><td>UNICORN</td><td><span class="tag">ABS</span></td><td class="muted">2023-02-23 15:09:31</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr><td class="num">5</td><td class="num">7641031</td><td>TH_SPL_Pioneer_ABL_01_HSBC</td><td>UNICORN</td><td><span class="tag">ABL</span></td><td class="muted">2023-09-14 11:40:50</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr><td class="num">6</td><td class="num">7641041</td><td>TH_SPL_Pioneer_Settled_ABL_01_HSBC</td><td>UNICORN</td><td><span class="tag">ABL</span></td><td class="muted">2024-01-25 14:26:24</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr><td class="num">7</td><td class="num">7641052</td><td>TH_BCL_Ocean_ABS_01</td><td>Seamoney</td><td><span class="tag">ABS</span></td><td class="muted">2024-03-14 10:53:05</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr><td class="num">8</td><td class="num">7641061</td><td>TH_SPL_Stellar_ABS_01</td><td>UNICORN</td><td><span class="tag">ABS</span></td><td class="muted">2024-07-16 12:06:53</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr><td class="num">9</td><td class="num">7641001</td><td>TH_SPL_SMN_DGL</td><td>Seamoney</td><td><span class="tag">Channeling</span></td><td class="muted">2024-11-28 16:30:52</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr><td class="num">10</td><td class="num">7641081</td><td>TH_SPL_Monee_ABL_01_HSBC</td><td>Seamoney</td><td><span class="tag">ABL</span></td><td class="muted">2024-11-28 16:30:53</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr><td class="num">11</td><td class="num">7641091</td><td>TH_SPL_Monee_Settled_ABL_01_HSBC</td><td>Seamoney</td><td><span class="tag">ABL</span></td><td class="muted">2024-11-28 16:30:54</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr><td class="num">12</td><td class="num">7641062</td><td>TH_BCL_IFC_ABS_01</td><td>SeaMoney</td><td><span class="tag">ABS</span></td><td class="muted">2025-03-10 19:07:08</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr><td class="num">13</td><td class="num">7641072</td><td>TH_BCL_OceanTwo_ABS_01</td><td>SeaMoney</td><td><span class="tag">ABS</span></td><td class="muted">2025-04-22 15:37:14</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr><td class="num">14</td><td class="num">7641201</td><td>TH_SPL_StarlightTwo_ABS_01</td><td>UNICORN</td><td><span class="tag">ABS</span></td><td class="muted">2025-06-11 10:20:45</td><td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td></tr>
+            <tr style="background:var(--blue-soft)">
+              <td class="num">15</td><td class="num">7641301</td>
+              <td><b>Nano_PCL_LHB</b> <span class="badge-new">NEW</span></td>
+              <td>Monee</td>
+              <td><span class="pill p-violet"><span class="dot"></span>DEBT SALE</span></td>
+              <td class="muted">2026-08-01 09:00:00</td>
+              <td style="text-align:right"><button class="btn primary" style="height:30px;padding:0 16px;font-size:12.5px" onclick="openLenderDetail()">View</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= LENDER DETAIL ================= -->
+    <section id="view-lenderdetail" class="hidden">
+      <span class="backlink" onclick="goLenderList()">← Back to Lender List</span>
+
+      <!-- Funder Info -->
+      <div class="sec">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Funder Info</div>
+        <div class="bd">
+          <div class="toolrow"><span class="link">Edit</span></div>
+          <div class="kvgrid">
+            <div class="kv2"><span class="kl">Funder ID：</span><span class="vl">7641301</span></div>
+            <div class="kv2"><span class="kl">Funder Name：</span><span class="vl">Nano_PCL_LHB</span></div>
+            <div class="kv2"><span class="kl">Funder Scheme：</span><span class="vl">Debt Sale</span></div>
+            <div class="kv2"><span class="kl">Create Time：</span><span class="vl">2026-08-01 09:00:00</span></div>
+            <div class="kv2"><span class="kl">Status：</span><span class="vl">Alive</span></div>
+            <div class="kv2"><span class="kl">Investor：</span><span class="vl">LH Bank</span></div>
+            <div class="kv2"><span class="kl">License：</span><span class="vl">DGL&amp;Nano</span></div>
+            <div class="kv2"><span class="kl">Platform/Agent：</span><span class="vl">Monee</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Funder Onboard Setting -->
+      <div class="sec closed">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Funder Onboard Setting</div>
+        <div class="bd">
+          <div class="toolrow"><span class="link">Edit</span></div>
+          <div style="font-weight:700;font-size:13.5px;margin-bottom:8px">1. Manual Clawback</div>
+          <div style="border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:18px;background:#fafbfe">
+            <div class="kv2"><span class="kl">Clawback Mode：</span><span class="vl muted">—</span></div>
+          </div>
+          <div style="font-weight:700;font-size:13.5px;margin-bottom:8px">2. Auto Clawback</div>
+          <div style="border:1px solid var(--line);border-radius:8px;padding:14px 16px;background:#fafbfe;display:flex;align-items:center;gap:10px">
+            <span class="kl">Auto Clawback：</span>
+            <span style="width:34px;height:18px;border-radius:20px;background:var(--line-strong);position:relative;display:inline-block"><span style="width:14px;height:14px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;box-shadow:0 1px 2px rgba(0,0,0,.2)"></span></span>
+            <span class="muted" style="font-size:12.5px">OFF</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Funder Fee Config -->
+      <div class="sec closed">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Funder Fee Config</div>
+        <div class="bd">
+          <div style="overflow-x:auto">
+            <table class="dtable" style="min-width:900px">
+              <thead><tr><th>Fee Type</th><th>Tenor</th><th>Target Group</th><th>Value &amp; Effective Time</th><th>Update By</th><th style="text-align:right">Operation</th></tr></thead>
+              <tbody id="lenderFeeTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rule List -->
+      <div class="sec closed">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Rule List</div>
+        <div class="bd">
+          <table class="dtable">
+            <thead><tr><th>Rule ID</th><th>Rules</th><th>Status</th><th style="text-align:right">Operation</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="num">86</td>
+                <td>Outstanding Principal in range [0.01,150000.00]</td>
+                <td><span class="pill p-green"><span class="dot"></span>Enable</span></td>
+                <td style="text-align:right">
+                  <button class="btn primary" style="height:28px;padding:0 12px;font-size:12px">Edit</button>
+                  <button class="btn" style="height:28px;padding:0 12px;font-size:12px;background:var(--red);border-color:var(--red);color:#fff">Disable</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Traffic Control -->
+      <div class="sec closed">
+        <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Traffic Control</div>
+        <div class="bd">
+          <div class="empty"><div class="ic">▢</div>No data</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Upload Users modal -->
+<div id="poolModal" class="scrim hidden">
+  <div class="modal">
+    <header><h3>Upload Users to Pool</h3><span class="x" onclick="closeAll()">×</span></header>
+    <div class="body">
+      <div style="border:1.6px dashed var(--line-strong);border-radius:10px;padding:28px 18px;text-align:center;background:#fafbfe">
+        <div style="font-size:28px;line-height:1">⬆</div>
+        <div style="font-weight:700;font-size:14px;margin-top:8px">Drag a CSV here, or browse</div>
+        <div class="muted" style="font-size:12px;margin-top:4px">columns: customer_id — appended to POOL-7641011</div>
+      </div>
+      <div class="callout"><span>ℹ</span><div>Uploads are <b>additive</b> — new IDs are appended and de-duplicated, so you can upload multiple times. On upload, the list + KYC are <b>sent to the bank for DD automatically</b> (SFTP). Use <b>Blacklist</b> to exclude IDs.</div></div>
+      <div><label>Action</label><div class="ctl">Add to pool (append) ⌄</div></div>
+    </div>
+    <footer><button class="btn" onclick="closeAll()">Cancel</button><button class="btn primary" onclick="closeAll()">Upload &amp; Send for DD</button></footer>
+  </div>
+</div>
+
+<!-- Create Batch modal -->
+<div id="batchModal" class="scrim hidden">
+  <div class="modal">
+    <header><h3>Create New Batch</h3><span class="x" onclick="closeAll()">×</span></header>
+    <div class="body">
+      <div><label>Source Pool</label><div class="ctl">POOL-7641011 · UOB_SPL_ABS_01 (ACTIVE) ⌄</div></div>
+      <div><label>Cut-off Time</label><div class="ctl">2026-08-01 00:00 ⌄</div></div>
+      <div><label>Target Selling Price</label><div class="ctl">฿ 3,900,000</div></div>
+      <div><label>Batch Tag</label><div class="ctl">Normal ⌄</div></div>
+      <div class="callout"><span>ℹ</span><div>On create, the batch snapshots eligible loans from the pool and enters <b>DRAFT</b>. Submitting starts Due Diligence.</div></div>
+    </div>
+    <footer><button class="btn" onclick="closeAll()">Cancel</button><button class="btn primary" onclick="closeAll()">Create Batch</button></footer>
+  </div>
+</div>
+
+<!-- Recon Download Mismatch File modal -->
+<div id="reconModal" class="scrim hidden">
+  <div class="modal" style="width:620px">
+    <header><h3>Download Mismatch File</h3><span class="x" onclick="closeAll()">×</span></header>
+    <div class="body" style="padding:0">
+      <div class="muted" style="font-size:12px;padding:14px 22px 0">Bank only uploads the loan-level mismatch file — matched loans don't produce a file.</div>
+      <table class="dtable" style="margin:0">
+        <thead><tr><th style="width:40px">#</th><th>Name</th><th>File Type</th><th style="text-align:right">Action</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1</td><td>RECON_MISMATCH_FILE</td><td class="muted">Recon Mismatch File · loan level</td><td style="text-align:right"><span class="link">Download</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <footer><button class="btn" onclick="closeAll()">Cancel</button></footer>
+  </div>
+</div>
+
+<script>
+  (function renderLenderFeeTable(){
+    var TENORS=['1M','2M','3M','6M','12M'];
+    var TARGET_GROUPS=['Normal User','Premium User'];
+    var FEE_TYPES=[
+      {name:'Monthly Eir',isNew:false},
+      {name:'Yearly Eir',isNew:false},
+      {name:'Discounting Factor (Principal)',isNew:true},
+      {name:'Discounting Factor (Interest)',isNew:true}
+    ];
+    var tbody=document.getElementById('lenderFeeTableBody');
+    if(!tbody) return;
+    var html='';
+    FEE_TYPES.forEach(function(ft){
+      TARGET_GROUPS.forEach(function(tg){
+        TENORS.forEach(function(tenor){
+          html+='<tr'+(ft.isNew?' class="fee-new"':'')+'>'+
+            '<td>'+ft.name+(ft.isNew?' <span class="tag new">NEW</span>':'')+'</td>'+
+            '<td>'+tenor+'</td>'+
+            '<td>'+tg+'</td>'+
+            '<td>0.0000%<br><span class="muted">1970-01-01 07:30:00</span></td>'+
+            '<td>default</td>'+
+            '<td style="text-align:right"><a href="#" onclick="return false;">Edit</a></td>'+
+          '</tr>';
+        });
+      });
+    });
+    tbody.innerHTML=html;
+  })();
+  function go(v){
+    document.getElementById('view-detail').classList.add('hidden');
+    document.getElementById('view-detail2').classList.add('hidden');
+    document.getElementById('view-pooldetail').classList.add('hidden');
+    document.getElementById('view-lenderlist').classList.add('hidden');
+    document.getElementById('view-lenderdetail').classList.add('hidden');
+    document.querySelector('.subtabs').classList.remove('hidden');
+    document.getElementById('view-pool').classList.toggle('hidden',v!=='pool');
+    document.getElementById('view-batch').classList.toggle('hidden',v!=='batch');
+    document.getElementById('view-recon').classList.toggle('hidden',v!=='recon');
+    document.getElementById('tab-pool').classList.toggle('active',v==='pool');
+    document.getElementById('tab-batch').classList.toggle('active',v==='batch');
+    document.getElementById('tab-recon').classList.toggle('active',v==='recon');
+    document.getElementById('lnk-pool').classList.toggle('active',v==='pool');
+    document.getElementById('lnk-batch').classList.toggle('active',v==='batch');
+    document.getElementById('lnk-recon').classList.toggle('active',v==='recon');
+    document.getElementById('lnk-lenderlist').classList.remove('active');
+    document.getElementById('crumbhead').textContent='Debt Sale Management';
+    document.getElementById('crumbtail').textContent=v==='pool'?'User Pool':v==='batch'?'Batch Management':'Recon Admin';
+    window.scrollTo(0,0);
+  }
+  function goLenderList(){
+    ['view-pool','view-batch','view-recon','view-pooldetail','view-detail','view-detail2','view-lenderdetail'].forEach(function(id){
+      document.getElementById(id).classList.add('hidden');
+    });
+    document.querySelector('.subtabs').classList.add('hidden');
+    document.getElementById('view-lenderlist').classList.remove('hidden');
+    ['lnk-pool','lnk-batch','lnk-recon'].forEach(function(id){document.getElementById(id).classList.remove('active');});
+    document.getElementById('lnk-lenderlist').classList.add('active');
+    document.getElementById('crumbhead').textContent='Lender Management';
+    document.getElementById('crumbtail').textContent='Lender List';
+    window.scrollTo(0,0);
+  }
+  function openLenderDetail(){
+    ['view-pool','view-batch','view-recon','view-pooldetail','view-detail','view-detail2','view-lenderlist'].forEach(function(id){
+      document.getElementById(id).classList.add('hidden');
+    });
+    document.querySelector('.subtabs').classList.add('hidden');
+    document.getElementById('view-lenderdetail').classList.remove('hidden');
+    document.getElementById('crumbhead').textContent='Lender Management';
+    document.getElementById('crumbtail').textContent='Lender Detail';
+    window.scrollTo(0,0);
+  }
+  function reconTab(t){
+    ['matched','mismatched','processing'].forEach(function(k){
+      document.getElementById('rtab-'+k).classList.toggle('active',k===t);
+      document.getElementById('recon-'+k).classList.toggle('hidden',k!==t);
+    });
+    var dl=document.getElementById('recon-download-btn');
+    dl.disabled=(t!=='mismatched');
+    dl.style.opacity=(t!=='mismatched')?.45:1;
+    dl.style.cursor=(t!=='mismatched')?'not-allowed':'pointer';
+  }
+  function openReconDownload(){document.getElementById('reconModal').classList.remove('hidden');}
+  function openUpload(){document.getElementById('poolModal').classList.remove('hidden');}
+  function openBatch(){document.getElementById('batchModal').classList.remove('hidden');}
+  function openDetail(){
+    document.getElementById('view-pool').classList.add('hidden');
+    document.getElementById('view-batch').classList.add('hidden');
+    document.getElementById('view-pooldetail').classList.add('hidden');
+    document.getElementById('view-detail2').classList.add('hidden');
+    document.getElementById('view-lenderlist').classList.add('hidden');
+    document.getElementById('view-lenderdetail').classList.add('hidden');
+    document.querySelector('.subtabs').classList.add('hidden');
+    document.getElementById('view-detail').classList.remove('hidden');
+    document.getElementById('lnk-pool').classList.remove('active');
+    document.getElementById('lnk-batch').classList.add('active');
+    document.getElementById('crumbtail').textContent='Batch Management / Batch Detail';
+    window.scrollTo(0,0);
+  }
+  function openDetail2(){
+    document.getElementById('view-pool').classList.add('hidden');
+    document.getElementById('view-batch').classList.add('hidden');
+    document.getElementById('view-pooldetail').classList.add('hidden');
+    document.getElementById('view-detail').classList.add('hidden');
+    document.getElementById('view-lenderlist').classList.add('hidden');
+    document.getElementById('view-lenderdetail').classList.add('hidden');
+    document.querySelector('.subtabs').classList.add('hidden');
+    document.getElementById('view-detail2').classList.remove('hidden');
+    document.getElementById('lnk-pool').classList.remove('active');
+    document.getElementById('lnk-batch').classList.add('active');
+    document.getElementById('crumbtail').textContent='Batch Management / Batch Detail';
+    window.scrollTo(0,0);
+  }
+  function openPoolDetail(){
+    document.getElementById('view-pool').classList.add('hidden');
+    document.getElementById('view-batch').classList.add('hidden');
+    document.getElementById('view-detail').classList.add('hidden');
+    document.getElementById('view-detail2').classList.add('hidden');
+    document.getElementById('view-lenderlist').classList.add('hidden');
+    document.getElementById('view-lenderdetail').classList.add('hidden');
+    document.querySelector('.subtabs').classList.add('hidden');
+    document.getElementById('view-pooldetail').classList.remove('hidden');
+    document.getElementById('lnk-batch').classList.remove('active');
+    document.getElementById('lnk-pool').classList.add('active');
+    document.getElementById('crumbtail').textContent='User Pool / Pool Detail';
+    window.scrollTo(0,0);
+  }
+  function toggleSec(hd){hd.parentElement.classList.toggle('closed');}
+  function closeAll(){document.querySelectorAll('.scrim').forEach(function(m){m.classList.add('hidden');});}
+  document.querySelectorAll('.scrim').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeAll();});});
+
+  // deep-link state for reproducible captures: ?view=batch|detail|pooldetail & ?modal=detail|upload|batch
+  (function(){
+    var q=new URLSearchParams(location.search);
+    var v=q.get('view'), m=q.get('modal');
+    if(v==='batch') go('batch');
+    else if(v==='recon') go('recon');
+    else if(v==='detail') openDetail();
+    else if(v==='detail2') openDetail2();
+    else if(v==='pooldetail') openPoolDetail();
+    else if(v==='lenderlist') goLenderList();
+    else if(v==='lenderdetail') openLenderDetail();
+    if(m==='detail') openDetail();
+    else if(m==='upload'||m==='pool') openUpload();
+    else if(m==='batch'){go('batch');openBatch();}
+    else if(m==='recon'){go('recon');openReconDownload();}
+  })();
+</script>
