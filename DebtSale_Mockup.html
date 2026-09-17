@@ -269,7 +269,7 @@
         <button class="btn primary" onclick="openUserBatch()">+ Create New User Batch</button>
       </div>
       <div style="display:flex;gap:9px;align-items:flex-start;background:var(--blue-soft);border:1px solid #cfe0ff;border-radius:9px;padding:11px 14px;font-size:12.5px;color:var(--blue-ink);margin-bottom:18px;line-height:1.4">
-        <span>ℹ</span><div>Creating a user batch <b>automatically sends the snapshot to the bank for Due Diligence</b> — <b>DebtSale_Decision_User</b> + KYC files go via SFTP. When the bank returns accepted / rejected, accepted users are notified and <b>NOTI_DD.csv</b> is sent to the bank. No manual "submit" step.</div>
+        <span>ℹ</span><div>On the batch's <b>Target DD Date</b>, the system <b>automatically pulls the pending sold user list from DE and sends it to the bank for Due Diligence</b> — <b>DebtSale_Decision_User</b> + KYC files go via SFTP. When the bank returns accepted / rejected, accepted users are notified and <b>NOTI_DD.csv</b> is sent to the bank. No manual "submit" step.</div>
       </div>
 
       <div class="detailgrid">
@@ -951,9 +951,9 @@
       <div><label>Source Pool</label><div class="ctl">POOL-7641011 · UOB_SPL_ABS_01 (ACTIVE) ⌄</div></div>
       <div><label>Target DD Date</label><div class="ctl">2026-08-01 ⌄</div></div>
       <div><label>Target User Count</label><div class="ctl">5,000</div></div>
-      <div class="callout"><span>ℹ</span><div>On create, the batch snapshots eligible users from the pool and enters <b>DRAFT</b>. Creating automatically <b>sends the list to the bank for Due Diligence</b> — <b>DebtSale_Decision_User</b> + KYC files go via SFTP.</div></div>
+      <div class="callout"><span>ℹ</span><div>On create, the batch enters <b>DRAFT</b>. On the <b>Target DD Date</b>, the system automatically pulls the <b>pending sold user list</b> from DE and sends it to the bank for Due Diligence — <b>DebtSale_Decision_User</b> + KYC files go via SFTP.</div></div>
     </div>
-    <footer><button class="btn" onclick="closeAll()">Cancel</button><button class="btn primary" onclick="closeAll()">Create Batch &amp; Send for DD</button></footer>
+    <footer><button class="btn" onclick="closeAll()">Cancel</button><button class="btn primary" onclick="closeAll()">Create Batch</button></footer>
   </div>
 </div>
 
