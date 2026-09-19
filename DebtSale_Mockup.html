@@ -962,10 +962,11 @@
   <div class="modal">
     <header><h3>Create New Batch</h3><span class="x" onclick="closeAll()">×</span></header>
     <div class="body">
-      <div><label>Source Pool</label><div class="ctl">POOL-7641011 · UOB_SPL_ABS_01 (ACTIVE) ⌄</div></div>
-      <div><label>Cut-off Time</label><div class="ctl">2026-08-01 00:00 ⌄</div></div>
-      <div><label>Target Selling Price</label><div class="ctl">฿ 3,900,000</div></div>
-      <div><label>Batch Tag</label><div class="ctl">Normal ⌄</div></div>
+      <div><label><span style="color:var(--red)">*</span> Please select source pool</label><div class="ctl">POOL-7641011 · UOB_SPL_ABS_01 (ACTIVE) ⌄</div></div>
+      <div><label><span style="color:var(--red)">*</span> Please select Cut-Off date (Start of Day)</label><div class="ctl" style="justify-content:space-between">2026-08-01 <span class="muted">📅</span></div></div>
+      <div><label><span style="color:var(--red)">*</span> Please select target sold date</label><div class="ctl" style="justify-content:space-between">2026-08-01 <span class="muted">📅</span></div></div>
+      <div><label><span style="color:var(--red)">*</span> Please enter batch Target Selling Price</label><div class="ctl">฿ 3,900,000</div></div>
+      <div><label><span style="color:var(--red)">*</span> Please select batch tag</label><div class="ctl">Normal ⌄</div></div>
       <div class="callout"><span>ℹ</span><div>On create, the batch snapshots eligible loans from the pool and enters <b>DRAFT</b>. Submitting starts Due Diligence.</div></div>
     </div>
     <footer><button class="btn" onclick="closeAll()">Cancel</button><button class="btn primary" onclick="closeAll()">Create Batch</button></footer>
