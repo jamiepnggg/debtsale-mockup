@@ -65,6 +65,8 @@
   .btn{height:34px;padding:0 16px;border-radius:7px;font-size:13px;font-weight:600;border:1px solid var(--line-strong);background:#fff;color:var(--ink-2);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
   .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
   .btn.primary:hover{background:var(--blue-ink)}
+  .btn.danger{background:var(--red);border-color:var(--red);color:#fff}
+  .btn.danger:hover{filter:brightness(.92)}
   .btn:hover{border-color:var(--ink-3)}
 
   .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
@@ -556,7 +558,7 @@
       <div class="sec closed">
         <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Operations</div>
         <div class="bd">
-          <div style="display:flex;gap:10px"><button class="btn">Discard Batch</button></div>
+          <div style="display:flex;gap:10px"><button class="btn" onclick="openDiscard()">Discard Batch</button></div>
         </div>
       </div>
 
@@ -672,7 +674,7 @@
       <div class="sec closed">
         <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Operations</div>
         <div class="bd">
-          <div style="display:flex;gap:10px"><button class="btn">Discard Batch</button></div>
+          <div style="display:flex;gap:10px"><button class="btn" onclick="openDiscard()">Discard Batch</button></div>
         </div>
       </div>
 
@@ -973,6 +975,18 @@
   </div>
 </div>
 
+<!-- Discard Batch confirm modal -->
+<div id="discardModal" class="scrim hidden">
+  <div class="modal" style="width:420px">
+    <div class="body" style="align-items:center;text-align:center;padding:28px 24px 8px;gap:10px">
+      <div style="width:48px;height:48px;border-radius:50%;background:var(--red-soft);color:var(--red);display:grid;place-items:center;font-size:24px;font-weight:700">!</div>
+      <h3 style="margin:4px 0 0;font-size:16px">Discard this batch?</h3>
+      <div class="muted" style="font-size:13px;line-height:1.5">All loans in this batch will be returned to the pool and the batch will be closed. This action cannot be undone.</div>
+    </div>
+    <footer style="border-top:none;justify-content:center;padding:18px 24px 24px"><button class="btn" onclick="closeAll()">Cancel</button><button class="btn danger" onclick="confirmDiscard()">Discard Batch</button></footer>
+  </div>
+</div>
+
 <!-- Recon Download Mismatch File modal -->
 <div id="reconModal" class="scrim hidden">
   <div class="modal" style="width:620px">
@@ -1118,6 +1132,8 @@
     window.scrollTo(0,0);
   }
   function toggleSec(hd){hd.parentElement.classList.toggle('closed');}
+  function openDiscard(){document.getElementById('discardModal').classList.remove('hidden');}
+  function confirmDiscard(){closeAll();}
   function closeAll(){document.querySelectorAll('.scrim').forEach(function(m){m.classList.add('hidden');});}
   document.querySelectorAll('.scrim').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeAll();});});
 
