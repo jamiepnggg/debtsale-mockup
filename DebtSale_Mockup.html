@@ -340,7 +340,7 @@
                 <td class="num muted">—</td>
                 <td><span class="pill p-amber"><span class="dot"></span>PENDING</span></td>
                 <td><span style="display:inline-flex;height:9px;width:150px;border-radius:5px;overflow:hidden;background:var(--line);vertical-align:middle"><i style="width:100%;background:var(--amber)"></i></span></td>
-                <td style="text-align:right" class="muted">awaiting result</td>
+                <td style="text-align:right"><span class="muted" style="margin-right:12px">awaiting result</span><button class="btn" style="height:28px;padding:0 12px;font-size:12px" onclick="openDiscard('This upload batch (UPL-7641011-1003 · 1,500 users) will be discarded. This action cannot be undone.')">Discard Batch</button></td>
               </tr>
               <tr>
                 <td>users_20260715.csv<div class="muted" style="font-size:11px;margin-top:2px">2026-07-15 09:40 · jamie.hopy</div></td>
@@ -981,7 +981,7 @@
     <div class="body" style="align-items:center;text-align:center;padding:28px 24px 8px;gap:10px">
       <div style="width:48px;height:48px;border-radius:50%;background:var(--red-soft);color:var(--red);display:grid;place-items:center;font-size:24px;font-weight:700">!</div>
       <h3 style="margin:4px 0 0;font-size:16px">Discard this batch?</h3>
-      <div class="muted" style="font-size:13px;line-height:1.5">All loans in this batch will be returned to the pool and the batch will be closed. This action cannot be undone.</div>
+      <div id="discardMsg" class="muted" style="font-size:13px;line-height:1.5"></div>
     </div>
     <footer style="border-top:none;justify-content:center;padding:18px 24px 24px"><button class="btn" onclick="closeAll()">Cancel</button><button class="btn danger" onclick="confirmDiscard()">Discard Batch</button></footer>
   </div>
@@ -1132,7 +1132,8 @@
     window.scrollTo(0,0);
   }
   function toggleSec(hd){hd.parentElement.classList.toggle('closed');}
-  function openDiscard(){document.getElementById('discardModal').classList.remove('hidden');}
+  var DISCARD_DEFAULT='All loans in this batch will be returned to the pool and the batch will be closed. This action cannot be undone.';
+  function openDiscard(msg){document.getElementById('discardMsg').textContent=msg||DISCARD_DEFAULT;document.getElementById('discardModal').classList.remove('hidden');}
   function confirmDiscard(){closeAll();}
   function closeAll(){document.querySelectorAll('.scrim').forEach(function(m){m.classList.add('hidden');});}
   document.querySelectorAll('.scrim').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeAll();});});
