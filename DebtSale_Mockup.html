@@ -65,8 +65,8 @@
   .btn{height:34px;padding:0 16px;border-radius:7px;font-size:13px;font-weight:600;border:1px solid var(--line-strong);background:#fff;color:var(--ink-2);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
   .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
   .btn.primary:hover{background:var(--blue-ink)}
-  .btn.danger{background:var(--red);border-color:var(--red);color:#fff}
-  .btn.danger:hover{filter:brightness(.92)}
+  .btn.revoke{border-color:var(--red);color:var(--red)}
+  .btn.revoke:hover{background:var(--red-soft)}
   .btn:hover{border-color:var(--ink-3)}
 
   .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
@@ -340,7 +340,7 @@
                 <td class="num muted">—</td>
                 <td><span class="pill p-amber"><span class="dot"></span>PENDING</span></td>
                 <td><span style="display:inline-flex;height:9px;width:150px;border-radius:5px;overflow:hidden;background:var(--line);vertical-align:middle"><i style="width:100%;background:var(--amber)"></i></span></td>
-                <td style="text-align:right"><span class="muted" style="margin-right:12px">awaiting result</span><button class="btn" style="height:28px;padding:0 12px;font-size:12px" onclick="openDiscard('This upload batch (UPL-7641011-1003 · 1,500 users) will be discarded. This action cannot be undone.')">Discard Batch</button></td>
+                <td style="text-align:right" class="muted">awaiting result</td>
               </tr>
               <tr>
                 <td>users_20260715.csv<div class="muted" style="font-size:11px;margin-top:2px">2026-07-15 09:40 · jamie.hopy</div></td>
@@ -558,7 +558,7 @@
       <div class="sec closed">
         <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Operations</div>
         <div class="bd">
-          <div style="display:flex;gap:10px"><button class="btn" onclick="openDiscard()">Discard Batch</button></div>
+          <div style="display:flex;gap:10px"><button class="btn revoke" onclick="openRevoke()">Revoke</button></div>
         </div>
       </div>
 
@@ -674,7 +674,7 @@
       <div class="sec closed">
         <div class="hd" onclick="toggleSec(this)"><span class="cv">▾</span> Operations</div>
         <div class="bd">
-          <div style="display:flex;gap:10px"><button class="btn" onclick="openDiscard()">Discard Batch</button></div>
+          <div style="display:flex;gap:10px"><button class="btn revoke" onclick="openRevoke()">Revoke</button></div>
         </div>
       </div>
 
@@ -975,15 +975,21 @@
   </div>
 </div>
 
-<!-- Discard Batch confirm modal -->
-<div id="discardModal" class="scrim hidden">
-  <div class="modal" style="width:420px">
-    <div class="body" style="align-items:center;text-align:center;padding:28px 24px 8px;gap:10px">
-      <div style="width:48px;height:48px;border-radius:50%;background:var(--red-soft);color:var(--red);display:grid;place-items:center;font-size:24px;font-weight:700">!</div>
-      <h3 style="margin:4px 0 0;font-size:16px">Discard this batch?</h3>
-      <div id="discardMsg" class="muted" style="font-size:13px;line-height:1.5"></div>
+<!-- Revoke schema modal -->
+<div id="revokeModal" class="scrim hidden">
+  <div class="modal" style="width:440px">
+    <header style="border-bottom:none;padding-bottom:4px"><h3>Please select intended revoke schema</h3><span class="x" onclick="closeAll()">×</span></header>
+    <div class="body" style="padding-top:10px;gap:18px">
+      <div style="display:flex;gap:22px;font-size:13.5px">
+        <label style="display:flex;align-items:center;gap:7px;margin:0;font-weight:500;cursor:pointer"><input type="radio" name="revokeSchema" value="entire" style="accent-color:var(--blue)" onchange="toggleRevokeSchema()"> Revoke Entire Batch</label>
+        <label style="display:flex;align-items:center;gap:7px;margin:0;font-weight:500;cursor:pointer"><input type="radio" name="revokeSchema" value="partial" checked style="accent-color:var(--blue)" onchange="toggleRevokeSchema()"> Partially revoke via File Upload</label>
+      </div>
+      <div id="revokePartial" style="display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+        <div style="font-size:13.5px">Download revoke <span class="link">Template</span></div>
+        <button class="btn primary" style="height:36px">⇪ Upload</button>
+      </div>
     </div>
-    <footer style="border-top:none;justify-content:center;padding:18px 24px 24px"><button class="btn" onclick="closeAll()">Cancel</button><button class="btn danger" onclick="confirmDiscard()">Discard Batch</button></footer>
+    <footer style="border-top:none"><button class="btn" onclick="closeAll()">Cancel</button><button class="btn primary" onclick="closeAll()">OK</button></footer>
   </div>
 </div>
 
@@ -1132,9 +1138,8 @@
     window.scrollTo(0,0);
   }
   function toggleSec(hd){hd.parentElement.classList.toggle('closed');}
-  var DISCARD_DEFAULT='All loans in this batch will be returned to the pool and the batch will be closed. This action cannot be undone.';
-  function openDiscard(msg){document.getElementById('discardMsg').textContent=msg||DISCARD_DEFAULT;document.getElementById('discardModal').classList.remove('hidden');}
-  function confirmDiscard(){closeAll();}
+  function openRevoke(){document.querySelector('input[name=revokeSchema][value=partial]').checked=true;toggleRevokeSchema();document.getElementById('revokeModal').classList.remove('hidden');}
+  function toggleRevokeSchema(){document.getElementById('revokePartial').style.display=document.querySelector('input[name=revokeSchema]:checked').value==='partial'?'flex':'none';}
   function closeAll(){document.querySelectorAll('.scrim').forEach(function(m){m.classList.add('hidden');});}
   document.querySelectorAll('.scrim').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeAll();});});
 
